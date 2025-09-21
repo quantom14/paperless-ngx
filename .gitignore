@@ -1,5 +1,14 @@
-**/.idea
+# Project settings
 .env
-**/backup/*
-!backup/README.md
-!backup/backup.sh
+**/backup/backups
+**/backup/*.log
+# IDEs and editors
+.idea/
+.run/
+.project
+.classpath
+.c9/
+*.launch
+*.iml
+.settings/
+*.sublime-workspace

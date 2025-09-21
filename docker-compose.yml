@@ -8,6 +8,8 @@ services:
   db:
     image: postgres:15
     restart: unless-stopped
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     env_file:
@@ -20,6 +22,8 @@ services:
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
+    ports:
+      - "18000:8000"
     depends_on:
       - db
       - broker

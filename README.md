@@ -30,11 +30,15 @@ It is designed for **local VPN-only access**, safe backups, and reproducible dep
 
 ### 3. Create the `.env` file
 
-Create a file named `.env` in the project root (it is ignored by git):
+Copy the `.env.template` to create an `.env` file in the project root (it is ignored by git):
+
+`cp .env.template .env`
+
+Enter your secrets:
 
 ``` 
-POSTGRES_DB=paperless
-POSTGRES_USER=paperless
+POSTGRES_DB=<db>
+POSTGRES_USER=<db user>
 POSTGRES_PASSWORD=<strong password>
 PAPERLESS_DBPASS=<same strong password>
 PAPERLESS_SECRET_KEY=<output of: openssl rand -hex 32>
@@ -59,27 +63,33 @@ When connected, open `http://<pi-vpn-ip>:8000` in a browser.
 
 Backups include:
 
-* PostgreSQL dump (db-YYYYMMDD-HHMMSS.sql)
-* PostgreSQL volume snapshot (pgdata-*.tar.gz)
-* Paperless data (data-*.tar.gz)
-* Paperless media (media-*.tar.gz)
+* PostgreSQL dump (`db-YYYYMMDD-HHMMSS.sql`)
+* PostgreSQL volume snapshot (`pgdata-*.tar.gz`)
+* Paperless data (`data-*.tar.gz`)
+* Paperless media (`media-*.tar.gz`)
 
 Backups are stored in the `backup/` directory and should be copied to external storage.
 
-### Manual backup
+### Manual backup & restore
 
-./backup/backup.sh
+Backup script:
+
+`./backup/backup.sh`
 
 ### Automated daily backup
 
-See backup/README.txt for scheduling with cron.
+See `backup/README.md` for scheduling with cron.
 
 ---
 
 ## Restore
 
-1. Stop the stack: docker compose down
-2. Restore volumes from the latest tarballs (use tar xzf).
+Restore script: `./backup/restore.sh`
+
+Running this script restores the most recent snapshot of the database and paperless application.
+
+1. Stop the stack: `docker compose down`
+2. Restore volumes from the latest tarballs (use `tar xzf`).
 3. Restore the database:  
-   cat backup/db-<date>.sql | docker compose exec -T db psql -U $POSTGRES_USER $POSTGRES_DB
-4. Start again: docker compose up -d
+   `cat backup/db-<date>.sql | docker compose exec -T db psql -U $POSTGRES_USER $POSTGRES_DB`
+4. Start again:`docker compose up -d`
