@@ -56,7 +56,7 @@ echo "[INFO] Cleaning up old backups, keeping last $MAX_BACKUPS"
 BACKUP_DIRS=()
 while IFS= read -r dir; do
     BACKUP_DIRS+=("$dir")
-done < <(find "$BACKUP_SRC_DIR" -maxdepth 1 -type d -name "/backups/backup_*" | sort)
+done < <(find "$BACKUP_SRC_DIR/backups" -maxdepth 1 -type d -name "backup_*" | sort)
 
 NUM_BACKUPS=${#BACKUP_DIRS[@]}
 if [ "$NUM_BACKUPS" -lt "$MAX_BACKUPS" ]; then
