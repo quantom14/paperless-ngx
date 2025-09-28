@@ -4,6 +4,8 @@ services:
     restart: unless-stopped
     volumes:
       - redisdata:/data
+    networks:
+      - default
 
   db:
     image: postgres:15
@@ -18,6 +20,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - default
 
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -45,6 +49,14 @@ services:
       PAPERLESS_OCR_LANGUAGES: "deu fra eng ltz"
       PAPERLESS_OCR_LANGUAGE: "deu"
       PAPERLESS_AVAILABLE_LANGUAGES: "de,fr,en"
+    networks:
+      - default
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true
+  default:
 
 volumes:
   redisdata:
